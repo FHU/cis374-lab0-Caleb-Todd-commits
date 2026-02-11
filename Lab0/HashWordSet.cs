@@ -26,28 +26,37 @@ public sealed class HashWordSet : IWordSet
         return words.Remove(word);
     }
 
-    /// TODO
     public string? Prev(string word)
     {
-        throw new NotImplementedException();
+        string? prevword = null;
+
+        foreach(var w in words)
+        {
+            if(w.CompareTo(word) < 0 && (prevword is null || w.CompareTo(prevword) > 0))
+            {
+            prevword = w;
+            }
+        }
+
+        return prevword;
     }
 
     public string? Next(string word)
     {
-        string? best = null;
+        string? nextword = null;
 
         // look for a better best
         foreach(var w in words)
         {
             // word < w && w < best
             if( word.CompareTo(w) < 0
-                && (best is null || w.CompareTo(best) < 0))
+                && (nextword is null || w.CompareTo(nextword) < 0))
             {
-                best = w;
+                nextword = w;
             }
         }
 
-        return best;
+        return nextword;
     }
 
     public IEnumerable<string> Prefix(string prefix, int k)
@@ -67,10 +76,21 @@ public sealed class HashWordSet : IWordSet
         return results.Slice(0, Math.Min(k, results.Count));
     }
 
-    /// TODO
-    public IEnumerable<string> Range(string lo, string hi, int k)
+    public IEnumerable<string> Range(string low, string high, int k)
     {
-        throw new NotImplementedException();
+        var results = new List<string>();
+
+        foreach(var word in words)
+        {
+            if(word.CompareTo(low) >= 0 && word.CompareTo(high) <= 0)
+            {
+                results.Add(word);
+            }
+        }
+
+        results.Sort();
+
+        return results.Slice(0, Math.Min(k, results.Count));
     }
 
 }

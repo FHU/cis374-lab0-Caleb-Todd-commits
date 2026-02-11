@@ -11,6 +11,8 @@ public sealed class HashWordSet : IWordSet
 {
     private HashSet<string> words = new();
 
+    public int Count => words.Count;
+
     public bool Add(string word)
     {
         return words.Add(word);
